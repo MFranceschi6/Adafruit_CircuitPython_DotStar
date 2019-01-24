@@ -103,7 +103,8 @@ class DotStar:
         self.end_header_size = n // 16
         if n % 16 != 0:
             self.end_header_size += 1
-        self._buf = bytearray(line * n * 4 + line * START_HEADER_SIZE + line * self.end_header_size)
+        self._line_length = n * 4 + START_HEADER_SIZE + self.end_header_size
+        self._buf = bytearray(line * self._line_length)
         self.end_header_index = START_HEADER_SIZE + n * 4 - self.end_header_size
         self.pixel_order = pixel_order
         for j in range(line):
@@ -261,31 +262,32 @@ class DotStar:
         s += "Start header size -> " + str(START_HEADER_SIZE) + '\n'
         s += "End header index -> " + str(self.end_header_index) + '\n'
         s += 'End header size -> ' + str(self.end_header_size) + '\n'
+        s += 'Single line length -> ' + str(self._line_length) + '\n'
         s += '| '
         for i in range(self._n * 4 + START_HEADER_SIZE + self.end_header_size):
             s += ' ' + str(i)
             if i < 10:
-                s += '    '
-            else:
                 s += '   '
+            else:
+                s += '  '
         s += '|\n'
         for i in range(self._line):
             s += "| "
             for j in range(START_HEADER_SIZE):
-                s += hex(self._buf[((self._n*4 + START_HEADER_SIZE + self.end_header_size)*i)+j])
-                if self._buf[((self._n*4 + START_HEADER_SIZE + self.end_header_size)*i)+j] == 0:
+                s += hex(self._buf[(self._line_length*i)+j])
+                if self._buf[(self._line_length*i)+j] == 0:
                     s += '   '
                 else:
                     s += '  '
             for j in range(START_HEADER_SIZE, self.end_header_index):
-                s += hex(self._buf[((self._n*4 + START_HEADER_SIZE + self.end_header_size)*i)+j])
-                if self._buf[((self._n*4 + START_HEADER_SIZE + self.end_header_size)*i)+j] == 0:
+                s += hex(self._buf[(self._line_length*i)+j])
+                if self._buf[(self._line_length*i)+j] == 0:
                     s += '  '
                 else:
                     s += ' '
             for j in range(self.end_header_index, (self.end_header_index + self.end_header_size)):
-                s += hex(self._buf[((self._n*4 + START_HEADER_SIZE + self.end_header_size)*i)+j])
-                if self._buf[((self._n*4 + START_HEADER_SIZE + self.end_header_size)*i)+j] == 0:
+                s += hex(self._buf[(self._line_length*i)+j])
+                if self._buf[(self._line_length*i)+j] == 0:
                     s += '  '
                 else:
                     s += ' '

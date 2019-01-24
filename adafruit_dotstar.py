@@ -270,9 +270,9 @@ class DotStar:
             for j in range(START_HEADER_SIZE):
                 s += hex(self._buf[(self._n*i)+j])
                 if self._buf[(self._n*i)+j] == 0:
-                    s += '  '
+                    s += '   '
                 else:
-                    s += ' '
+                    s += '  '
             for j in range(START_HEADER_SIZE, self.end_header_index):
                 s += hex(self._buf[(self._n*i)+j])
                 if self._buf[(self._n*i)+j] == 0:

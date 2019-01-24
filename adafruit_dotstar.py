@@ -103,7 +103,7 @@ class DotStar:
         if n % 16 != 0:
             self.end_header_size += 1
         self._buf = bytearray(line * n * 4 + line * START_HEADER_SIZE + line * self.end_header_size)
-        self.end_header_index = len(self._buf) - self.end_header_size
+        self.end_header_index = START_HEADER_SIZE + n * 4 - self.end_header_size
         self.pixel_order = pixel_order
         for j in range(line):
             # Four empty bytes to start.

@@ -261,9 +261,9 @@ class DotStar:
         s += "Start header size -> " + str(START_HEADER_SIZE) + '\n'
         s += "End header index -> " + str(self.end_header_index) + '\n'
         s += 'End header size -> ' + str(self.end_header_size) + '\n'
-        s += '| header '
-        for _ in range(self._n):
-            s += '-'
+        s += '| header --------'
+        for i in range(self._n):
+            s += ' ' + str(i) + "  "
         s += ' end header |\n'
         for i in range(self._line):
             s += "| "
@@ -273,7 +273,7 @@ class DotStar:
             for j in range(START_HEADER_SIZE, self.end_header_index):
                 s += hex(self._buf[(self._n*i)+j]) + " "
             s += " "
-            for j in range(self.end_header_index, self._n):
+            for j in range(self.end_header_index, (self.end_header_index + self.end_header_size)):
                 s += hex(self._buf[(self._n*i)+j]) + " "
             s += " |\n"
         return s

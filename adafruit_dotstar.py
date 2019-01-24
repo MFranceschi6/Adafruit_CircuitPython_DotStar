@@ -266,9 +266,9 @@ class DotStar:
         for i in range(self._n * 4 + START_HEADER_SIZE + self.end_header_size):
             s += str(i)
             if i < 10:
-                s += '   '
+                s += '    '
             else:
-                s += '  '
+                s += '   '
         s += '\n'
         for i in range(len(self._buf)):
             s += hex(self._buf[i])
@@ -276,7 +276,7 @@ class DotStar:
                 s += '  '
             else:
                 s += ' '
-            if i % self._line_length == 0 and i != 0:
+            if i % (self._line_length-1) == 0 and i != 0:
                 s += " |\n"
         return s
 

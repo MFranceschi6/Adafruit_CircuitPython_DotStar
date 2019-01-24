@@ -275,7 +275,7 @@ class DotStar:
             if self._buf[i] == 0:
                 s += '  '
                 s += ' '
-            if i % self._line_length == 0 && i != 0:
+            if i % self._line_length == 0 and i != 0:
                 s += " |\n"
         return s
 

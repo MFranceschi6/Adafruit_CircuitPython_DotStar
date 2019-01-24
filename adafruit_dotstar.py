@@ -110,13 +110,13 @@ class DotStar:
         for j in range(line):
             # Four empty bytes to start.
             for i in range(START_HEADER_SIZE):
-                self._buf[(j * n) + i] = 0x00
+                self._buf[(j * self._line_length) + i] = 0x00
             # Mark the beginnings of each pixel.
             for i in range(START_HEADER_SIZE, self.end_header_index, 4):
-                self._buf[(j * n) + i] = 0xff
+                self._buf[(j * self._line_length) + i] = 0xff
             # 0xff bytes at the end.
             for i in range(self.end_header_index, (self.end_header_index + self.end_header_size)):
-                self._buf[(j * n) + i] = 0xff
+                self._buf[(j * self._line_length) + i] = 0xff
         self._brightness = 1.0
         # Set auto_write to False temporarily so brightness setter does _not_
         # call show() while in __init__.

@@ -85,6 +85,7 @@ class DotStar:
     def __init__(self, clock, data, n, line, *, brightness=1.0, auto_write=True,
                  pixel_order=BGR, baudrate=4000000):
         self._spi = None
+        self._line = line
         try:
             self._spi = busio.SPI(clock, MOSI=data)
             while not self._spi.try_lock():
@@ -261,7 +262,7 @@ class DotStar:
         for _ in range(self._n):
             s += '-'
         s += ' end header |\n'
-        for i in range(int(len(self._buf)/self._n)):
+        for i in range(self._line):
             s += "| "
             for j in range(START_HEADER_SIZE):
                 s += hex(self._buf[(self._n*i)+j]) + " "

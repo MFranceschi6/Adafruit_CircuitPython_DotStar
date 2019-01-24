@@ -271,6 +271,7 @@ class DotStar:
             for j in range(self.end_header_index, self._n):
                 s += hex(self._buf[(self._n*i)+j])
             s += " |\n"
+        return s
 
     def show(self, line=0):
         """Shows the new colors on the pixels themselves if they haven't already

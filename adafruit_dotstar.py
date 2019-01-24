@@ -264,6 +264,8 @@ class DotStar:
         s += 'End header size -> ' + str(self.end_header_size) + '\n'
         s += 'Single line length -> ' + str(self._line_length) + '\n'
         for i in range(self._n * 4 + START_HEADER_SIZE + self.end_header_size):
+            if i % self._line_length == 0 and i != 0:
+                s += " |\n"
             s += str(i)
             if i < 10:
                 s += '    '
@@ -276,8 +278,7 @@ class DotStar:
                 s += '  '
             else:
                 s += ' '
-            if i % (self._line_length-1) == 0 and i != 0:
-                s += " |\n"
+
         return s
 
     def show(self, line=0):

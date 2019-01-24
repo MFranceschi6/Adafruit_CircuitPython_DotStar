@@ -30,6 +30,7 @@
 """
 import busio
 import digitalio
+import math
 
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_DotStar.git"
@@ -81,7 +82,7 @@ class DotStar:
             time.sleep(2)
     """
 
-    def __init__(self, clock, data, n, *, brightness=1.0, auto_write=True,
+    def __init__(self, clock, data, n, line, *, brightness=1.0, auto_write=True,
                  pixel_order=BGR, baudrate=4000000):
         self._spi = None
         try:
@@ -101,18 +102,19 @@ class DotStar:
         self.end_header_size = n // 16
         if n % 16 != 0:
             self.end_header_size += 1
-        self._buf = bytearray(n * 4 + START_HEADER_SIZE + self.end_header_size)
+        self._buf = bytearray(line * n * 4 + line * START_HEADER_SIZE + line * self.end_header_size)
         self.end_header_index = len(self._buf) - self.end_header_size
         self.pixel_order = pixel_order
-        # Four empty bytes to start.
-        for i in range(START_HEADER_SIZE):
-            self._buf[i] = 0x00
-        # Mark the beginnings of each pixel.
-        for i in range(START_HEADER_SIZE, self.end_header_index, 4):
-            self._buf[i] = 0xff
-        # 0xff bytes at the end.
-        for i in range(self.end_header_index, len(self._buf)):
-            self._buf[i] = 0xff
+        for j in range(line):
+            # Four empty bytes to start.
+            for i in range(START_HEADER_SIZE):
+                self._buf[(j * n) + i] = 0x00
+            # Mark the beginnings of each pixel.
+            for i in range(START_HEADER_SIZE, self.end_header_index, 4):
+                self._buf[(j * n) + i] = 0xff
+            # 0xff bytes at the end.
+            for i in range(self.end_header_index, (self.end_header_index + self.end_header_size)):
+                self._buf[(j * n) + i] = 0xff
         self._brightness = 1.0
         # Set auto_write to False temporarily so brightness setter does _not_
         # call show() while in __init__.
@@ -158,8 +160,11 @@ class DotStar:
         slower clock than the rest of the LEDs. This can cause problems in
         Persistence of Vision Applications
         """
+        num = 0
+        if index > self._n:
+            num = math.ceil(self._n / index)
 
-        offset = index * 4 + START_HEADER_SIZE
+        offset = index * 4 + (START_HEADER_SIZE * (num + 1))
         rgb = value
         if isinstance(value, int):
             rgb = (value >> 16, (value >> 8) & 0xff, value & 0xff)
@@ -238,15 +243,36 @@ class DotStar:
             self.show()
         self.auto_write = auto_write
 
-    def _ds_writebytes(self, buf):
-        for b in buf:
+    def _ds_writebytes(self, buf, start=0, length=-1):
+        if length == -1:
+            length = len(buf)
+        for i in range(start,length):
             for _ in range(8):
                 self.cpin.value = True
-                self.dpin.value = (b & 0x80)
+                self.dpin.value = (buf[i] & 0x80)
                 self.cpin.value = False
-                b = b << 1
+                buf[i] = buf[i] << 1
 
-    def show(self):
+    def __str__(self):
+        s = ""
+        s += "Number of leds -> " + str(self._n) + "\n"
+        s += "Dimension of Buffer -> " + str(len(self._buf)) + "\n"
+        s += '| header '
+        s = s.join(['-' for _ in range(self._n)])
+        s += ' end header |\n'
+        for i in range(int(len(self._buf)/self._n)):
+            s += "| "
+            for j in range(START_HEADER_SIZE):
+                s += hex(self._buf[(self._n*i)+j])
+            s += " "
+            for j in range(START_HEADER_SIZE, self._n-self.end_header_size):
+                s += hex(self._buf[(self._n*i)+j])
+            s += " "
+            for j in range(self.end_header_index, self._n):
+                s += hex(self._buf[(self._n*i)+j])
+            s += " |\n"
+
+    def show(self, line=0):
         """Shows the new colors on the pixels themselves if they haven't already
         been autowritten.
 
@@ -266,7 +292,7 @@ class DotStar:
                 buf[i] = 0xff
 
         if self._spi:
-            self._spi.write(buf)
+            self._spi.write(buf, line * self._n, (line + 1) * self._n)
         else:
-            self._ds_writebytes(buf)
+            self._ds_writebytes(buf, line * self._n, (line + 1) * self._n)
             self.cpin.value = False

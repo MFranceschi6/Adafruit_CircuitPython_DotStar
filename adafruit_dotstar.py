@@ -271,27 +271,15 @@ class DotStar:
             else:
                 s += '  '
         s += '|\n'
-        for i in range(self._line):
-            s += "| "
-            for j in range(START_HEADER_SIZE):
-                s += hex(self._buf[(self._line_length*i)+j])
-                if self._buf[(self._line_length*i)+j] == 0:
-                    s += '   '
-                else:
-                    s += '  '
-            for j in range(START_HEADER_SIZE, self.end_header_index):
-                s += hex(self._buf[(self._line_length*i)+j])
-                if self._buf[(self._line_length*i)+j] == 0:
-                    s += '  '
-                else:
-                    s += ' '
-            for j in range(self.end_header_index, (self.end_header_index + self.end_header_size)):
-                s += hex(self._buf[(self._line_length*i)+j])
-                if self._buf[(self._line_length*i)+j] == 0:
-                    s += '  '
-                else:
-                    s += ' '
-            s += " |\n"
+        for i in range(len(self._buf)):
+            if i % self._line_length == 0:
+                s += '|'
+            s += hex(self._buf[i])
+            if self._buf[i] == 0:
+                s += '  '
+                s += ' '
+            if i % self._line_length == 0:
+                s += " |\n"
         return s
 
     def show(self, line=0):

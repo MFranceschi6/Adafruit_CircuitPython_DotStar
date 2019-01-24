@@ -263,7 +263,11 @@ class DotStar:
         s += 'End header size -> ' + str(self.end_header_size) + '\n'
         s += '| '
         for i in range(self._n * 4 + START_HEADER_SIZE + self.end_header_size):
-            s += ' ' + str(i) + "  "
+            s += ' ' + str(i)
+            if i < 10:
+                s += '    '
+            else:
+                s += '   '
         s += '|\n'
         for i in range(self._line):
             s += "| "

@@ -274,6 +274,7 @@ class DotStar:
             s += hex(self._buf[i])
             if self._buf[i] == 0:
                 s += '  '
+            else:
                 s += ' '
             if i % self._line_length == 0 and i != 0:
                 s += " |\n"

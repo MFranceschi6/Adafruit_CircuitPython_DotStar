@@ -258,6 +258,9 @@ class DotStar:
         s = ""
         s += "Number of leds -> " + str(self._n) + "\n"
         s += "Dimension of Buffer -> " + str(len(self._buf)) + "\n"
+        s += "Start header size -> " + str(START_HEADER_SIZE) + '\n'
+        s += "End header index -> " + str(self.end_header_index) + '\n'
+        s += 'End header size -> ' + str(self.end_header_size) + '\n'
         s += '| header '
         for _ in range(self._n):
             s += '-'

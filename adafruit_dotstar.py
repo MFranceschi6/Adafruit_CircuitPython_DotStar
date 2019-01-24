@@ -258,18 +258,19 @@ class DotStar:
         s += "Number of leds -> " + str(self._n) + "\n"
         s += "Dimension of Buffer -> " + str(len(self._buf)) + "\n"
         s += '| header '
-        s = s.join(['-' for _ in range(self._n)])
+        for _ in range(self._n):
+            s += '-'
         s += ' end header |\n'
         for i in range(int(len(self._buf)/self._n)):
             s += "| "
             for j in range(START_HEADER_SIZE):
-                s += hex(self._buf[(self._n*i)+j])
+                s += hex(self._buf[(self._n*i)+j]) + " "
             s += " "
-            for j in range(START_HEADER_SIZE, self._n-self.end_header_size):
-                s += hex(self._buf[(self._n*i)+j])
+            for j in range(START_HEADER_SIZE, self.end_header_index):
+                s += hex(self._buf[(self._n*i)+j]) + " "
             s += " "
             for j in range(self.end_header_index, self._n):
-                s += hex(self._buf[(self._n*i)+j])
+                s += hex(self._buf[(self._n*i)+j]) + " "
             s += " |\n"
         return s
 

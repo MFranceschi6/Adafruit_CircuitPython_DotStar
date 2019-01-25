@@ -190,7 +190,7 @@ class DotStar:
 
     def __setitem__(self, index, val):
         if isinstance(index, slice):
-            start, stop, step = index.indices(self._n)
+            start, stop, step = index.indices(self._n*self._line)
             length = stop - start
             print(start)
             print(stop)

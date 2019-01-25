@@ -270,3 +270,29 @@ class DotStar:
         else:
             self._ds_writebytes(buf)
             self.cpin.value = False
+
+    def __str__(self):
+        s = ""
+        s += "Number of leds -> " + str(self._n) + "\n"
+        s += "Dimension of Buffer -> " + str(len(self._buf)) + "\n"
+        s += "Start header size -> " + str(START_HEADER_SIZE) + '\n'
+        s += "End header index -> " + str(self.end_header_index) + '\n'
+        s += 'End header size -> ' + str(self.end_header_size) + '\n'
+        s += 'Single line length -> ' + str(len(self._buf)) + '\n'
+        for i in range(self._n * 4 + START_HEADER_SIZE + self.end_header_size):
+            s += str(i)
+            if i < 10:
+                s += '    '
+            else:
+                s += '   '
+        s += '\n|'
+        for i in range(len(self._buf)):
+            # if i % self._line_length == 0 and i != 0:
+            #    s += " |\n"
+            s += hex(self._buf[i])
+            if self._buf[i] == 0:
+                s += '  '
+            else:
+                s += ' '
+        s += '|\n'
+        return s

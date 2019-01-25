@@ -168,6 +168,9 @@ class DotStar:
 
         offset = index * 4 + (START_HEADER_SIZE * (num + 1)) + (self.end_header_size * num)
         rgb = value
+        print("index -> {0}, num -> {1}, offset -> {2} + {3} + {4} = {5}".format(index, num, index * 4,
+                                                                                 START_HEADER_SIZE * (num + 1),
+                                                                                 self.end_header_size * num, offset))
         if isinstance(value, int):
             rgb = (value >> 16, (value >> 8) & 0xff, value & 0xff)
 
@@ -190,12 +193,8 @@ class DotStar:
 
     def __setitem__(self, index, val):
         if isinstance(index, slice):
-            start, stop, step = index.indices(self._n*self._line)
+            start, stop, step = index.indices(self._n * self._line)
             length = stop - start
-            print(start)
-            print(stop)
-            print(step)
-            print(length)
             if step != 0:
                 # same as math.ceil(length / step)
                 # Idea from https://fizzbuzzer.com/implement-a-ceil-function/
@@ -203,7 +202,6 @@ class DotStar:
             if len(val) != length:
                 raise ValueError("Slice and input sequence size do not match.")
             for val_i, in_i in enumerate(range(start, stop, step)):
-                print(val_i, in_i, val[val_i])
                 self._set_item(in_i, val[val_i])
         else:
             self._set_item(index, val)
@@ -227,7 +225,7 @@ class DotStar:
                      for i in range(3))
 
     def __len__(self):
-        return self._n*self._line
+        return self._n * self._line
 
     @property
     def brightness(self):
@@ -253,7 +251,7 @@ class DotStar:
     def _ds_writebytes(self, buf, start=0, length=-1):
         if length == -1:
             length = len(buf)
-        for i in range(start,length):
+        for i in range(start, length):
             for _ in range(8):
                 self.cpin.value = True
                 self.dpin.value = (buf[i] & 0x80)

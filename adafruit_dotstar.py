@@ -164,7 +164,7 @@ class DotStar:
         """
         num = 0
         if index >= self._n:
-            num = math.ceil(index / self._n)
+            num = index // self._n
 
         offset = index * 4 + (START_HEADER_SIZE * (num + 1)) + (self.end_header_size * num)
         rgb = value

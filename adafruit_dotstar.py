@@ -285,7 +285,7 @@ class DotStar:
                 s += '    '
             else:
                 s += '   '
-        s += '\n|'
+        s += '\n'
         for i in range(len(self._buf)):
             # if i % self._line_length == 0 and i != 0:
             #    s += " |\n"

@@ -163,7 +163,7 @@ class DotStar:
         Persistence of Vision Applications
         """
         num = 0
-        if index > self._n:
+        if index >= self._n:
             num = math.ceil(self._n / index)
 
         offset = index * 4 + (START_HEADER_SIZE * (num + 1))

@@ -192,6 +192,10 @@ class DotStar:
         if isinstance(index, slice):
             start, stop, step = index.indices(self._n)
             length = stop - start
+            print(start)
+            print(stop)
+            print(step)
+            print(length)
             if step != 0:
                 # same as math.ceil(length / step)
                 # Idea from https://fizzbuzzer.com/implement-a-ceil-function/

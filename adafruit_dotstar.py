@@ -203,6 +203,7 @@ class DotStar:
             if len(val) != length:
                 raise ValueError("Slice and input sequence size do not match.")
             for val_i, in_i in enumerate(range(start, stop, step)):
+                print(val_i, in_i, val[val_i])
                 self._set_item(in_i, val[val_i])
         else:
             self._set_item(index, val)

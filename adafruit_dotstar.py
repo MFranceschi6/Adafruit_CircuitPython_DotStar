@@ -222,7 +222,7 @@ class DotStar:
                      for i in range(3))
 
     def __len__(self):
-        return self._n
+        return self._n*self._line
 
     @property
     def brightness(self):

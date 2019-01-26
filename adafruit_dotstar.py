@@ -304,7 +304,8 @@ class DotStar:
                 buf[i] = 0xff
 
         if self._spi:
-            self._spi.write(buf, line * self._n, (line + 1) * self._n)
+            print(line * self._line_length, (line + 1) * self._line_length)
+            self._spi.write(buf, line * self._line_length, (line + 1) * self._line_length)
         else:
-            self._ds_writebytes(buf, line * self._n, (line + 1) * self._n)
+            self._ds_writebytes(buf, line * self._line_length, (line + 1) * self._line_length)
             self.cpin.value = False
